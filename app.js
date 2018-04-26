@@ -1,3 +1,4 @@
+
 const express = require('express');
 const multer = require('multer');
 const fs = require('fs');
@@ -5,25 +6,73 @@ const upload = multer({ dest: 'public/uploads' });
 const port = 3000;
 const app = express();
 
+const publicPath = './public';
+const uploadsPath = publicPath + '/uploads/';
+
 const uploaded_files = [];
 
-app.use(express.static('public'));
-app.use(express.static('./public/uploads/'));
+app.use(express.static(publicPath));
+app.use(express.static(uploadsPath));
 
-app.get('/home', (req, res) => {
-    const path = './public/uploads/';
-    fs.readdir(path, function (err, items) {
+const html = {
+    head: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <title>My Kenziegram</title>
+            <link rel="stylesheet" href="./style.css">
+        </head>
+    `,
+    bodyHeader: `
+        <body>
+            <h1>Welcome to Kenziegram!</h1>
+    `,
+    form: `
+        <form action="http://localhost:3000/uploads" method="post" enctype="multipart/form-data">
+            <div>
+            <label for="file">Choose a File</label>
+            <!-- <input type="file" id="file" name="myFile"> -->
+            <input type="file" id="file" name="File">
+            
+            <!-- <input type="file" name="file" id="file" accept="image/*" multiple> -->
+            </div>
+            <div>
+            <button>Send the file</button>
+            </div>
+        </form>
+    `,
+    foot: `
+        <script src="./index.js"></script>
+        </body>
+        </html>
+    `,
+}
+
+
+
+app.get('/', (req, res) => {
+    fs.readdir(uploadsPath, function (err, items) {
         console.log(items);
-        let html = `<h1>Welcome to Kenziegram!</h1>`;
-        for (i=0; i<items.length; i++){
-            html += `<img src="${items[i]}">`;
-        }
         
-        res.send(html);
+        let htmlImageGallery = ``;
+        for (let i = 0; i < items.length; i++) {
+            htmlImageGallery += `<img src="${ items[i] }">`;
+        }
+
+        const htmlOutput = 
+            html.head + 
+            html.bodyHeader + 
+            html.form + 
+            htmlImageGallery + 
+            html.foot;
+
+        console.log("code that will run in node, instead of in the browser")
+        res.send(htmlOutput);
     });
 });
 
-app.post('/upload', upload.single('myFile'), function (req, res, next) {
+app.post('/uploads', upload.single('myFile'), function (req, res, next) {
 
     // req.file is the `myFile` file
     // req.body will hold the text fields, if there are any
