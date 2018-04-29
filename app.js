@@ -33,7 +33,7 @@ const html = {
             <div>
             <label for="file">Choose a File</label>
             <!-- <input type="file" id="file" name="myFile"> -->
-            <input type="file" id="file" name="File">
+            <input type="file" id="file" name="myFile">
             
             <!-- <input type="file" name="file" id="file" accept="image/*" multiple> -->
             </div>
