@@ -1,0 +1,34 @@
+html
+    head
+        link(
+            rel='stylesheet'
+            href='./style.css'
+        )
+    body
+        h1 Welcome to Kenziegram!
+        form(
+            action='/uploads'
+            method='post'
+            enctype='multipart/form-data'
+        )
+            div
+                label(
+                    for='file'
+                ) Choose a file:
+                input(
+                    type='file'
+                    id='file'
+                    name='myFile'
+                )
+            div
+                button(
+                    type='submit'
+                ) Send the file
+
+        div 
+            for item in items  
+                img(
+                    src=`/uploads/${item}`
+                    height="300px"
+                    width="300px"
+                )
